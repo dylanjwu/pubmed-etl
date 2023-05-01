@@ -1,7 +1,0 @@
-"0",""
-"0","new_df = data.frame(q1=res$articles_q1, q2=res$articles_q2, q3=res$articles_q3, q4=res$articles_q4)"
-"0","years = c(1975, 1976, 1977, 1978)"
-"0","colors = c(""darkred"", ""orange"", ""darkgreen"", ""blue"")"
-"0",""
-"0","quarter_range = 1:4"
-"0","plot(quarter_range, new_df[i,], ylab=""Articles"", xlab=""Quarter"", type=""n"", xlim=c(1,4), ylim=c(1,55), main=""Articles per Quarter"", xaxt = ""n"")"

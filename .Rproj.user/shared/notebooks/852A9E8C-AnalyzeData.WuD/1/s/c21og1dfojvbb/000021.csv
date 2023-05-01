@@ -1,6 +1,0 @@
-"0","res = dbGetQuery(mysql_conn, """
-"0","                    SELECT DISTINCT journal_title, articles_total "
-"0","                      FROM JournalFacts"
-"0","                    ORDER BY articles_total DESC LIMIT 5"
-"0","                  "")"
-"0","print(res)"
