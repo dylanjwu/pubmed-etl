@@ -1,0 +1,4 @@
+"0","for (i in quarter_range) {"
+"0","  lines(quarter_range, new_df[i,], lty=""dashed"", lwd=3, col=colors[i])"
+"0","  lines(quarter_range, new_df[i+4,], lwd=3, col=colors[i])"
+"0","}"

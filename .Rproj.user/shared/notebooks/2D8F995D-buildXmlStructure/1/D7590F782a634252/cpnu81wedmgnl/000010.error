@@ -1,0 +1,1 @@
+{"frames":[{"func":"xmlParse(xmlFile, validate = T)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0},{"func":"(if (isHTML) warning else stop)(e)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error: XML content does not seem to be XML: ''\n"}

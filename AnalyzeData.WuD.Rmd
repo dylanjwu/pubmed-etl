@@ -1,0 +1,96 @@
+---
+title: "Analyze Data"
+output: pdf_document
+date: "2023-04-20"
+author: "Dylan Wu"
+---
+
+## Analysis of Publications
+
+```{r, connectToDb}
+if (!hasPacman) install.packages("pacman")
+pacman::p_load(RMySQL)
+
+sqlite_conn <- dbConnect(RSQLite::SQLite(), fpath)
+mysql_conn <- dbConnect(
+  RMySQL::MySQL(),
+  db = 'cs5200_db',
+  user = 'admin',
+  port = 3306,
+  host = '***',
+  password = '****'
+)
+```
+
+
+
+### Top five journals with the most articles published in them for the time period
+
+The most articles appeared in the journals "The Journal of pharmacy and pharmacology", "Biochimica et biophysica acta",
+"The Journal of biological chemistry", "Annales de l'anesthesiologie francaise", "Biochemistry", ranging from 1036 articles
+in the entire period of years 1975-1978 for "pharmacy and pharmacology" to "Biochemistry" at 375 total articles.
+```{r, getTop5Journals}
+res = dbGetQuery(mysql_conn, "
+                    SELECT DISTINCT journal_title, articles_total 
+                      FROM JournalFacts
+                    ORDER BY articles_total DESC LIMIT 5
+                  ")
+print(res)
+```
+
+### Articles for each journal per quarter for each year
+
+```{r getArticlesPerYearPerQtr}
+res = dbGetQuery(mysql_conn, "
+          SELECT
+            	journal_title,
+            	pub_year,
+            	articles_year,
+            	articles_q1,
+            	articles_q2,
+            	articles_q3,
+            	articles_q4
+          FROM
+	            JournalFacts 
+	        LIMIT 8
+")
+res
+
+```
+
+We can view the above data more intuitively by plotting two journals in the same plot. We differentiate between the two journals 
+by styling one as dashed, and we differentiate the years by color-coding them. In this way, we can see how each journal's number
+of articles change each quarter for all four years. As we can see, journal "Biochemical and biophysical" has much higher numbers 
+than "Biochemical" all years except the first three quarters of 1975. Interestingly, the number of articles appearing in "Biochemical and biophysical"
+increased drastically in quarter 4, which is significantly greater number of articles, at 37 articles, than all proceeding years for the journal.
+
+```{r visualizeData}
+
+new_df = data.frame(q1=res$articles_q1, q2=res$articles_q2, q3=res$articles_q3, q4=res$articles_q4)
+years = c(1975, 1976, 1977, 1978)
+colors = c("darkred", "orange", "darkgreen", "blue")
+
+quarter_range = 1:4
+plot(quarter_range, new_df[i,], ylab="Articles", xlab="Quarter", type="n", xlim=c(1,4), ylim=c(1,55), main="Articles per Quarter", xaxt = "n")
+# referenced: https://stat.ethz.ch/pipermail/r-help/2004-February/046241.html; to use integer x-values (using xaxt="n" and following line)
+# Note: I also used chatGPT to learn how to create plots/lines/legends in R
+axis(1, at = 1:4)
+
+# add all year-lines for both journals
+abline(v = c(1,2,3,4), lty="dashed")
+for (i in quarter_range) {
+  lines(quarter_range, new_df[i,], lty="dashed", lwd=3, col=colors[i])
+  lines(quarter_range, new_df[i+4,], lwd=3, col=colors[i])
+}
+
+# add legends
+legend("topright", legend=years, col=colors, lwd=2)
+legend("topleft", legend=res[c(1, 5), 'journal_title'], lty=c(2, 1), lwd=2)
+
+```
+
+
+```{r, disconnectDb}
+dbDisconnect(mysql_conn)
+```
+

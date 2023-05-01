@@ -1,0 +1,13 @@
+"0",""
+"0","xmlInstalled <- require(XML)"
+"2","Loading required package: XML
+"
+"0","if (!xmlInstalled) {"
+"0","  install.packages('XML')"
+"0","}"
+"0",""
+"0","xmlFile <- ""page_log.xml"""
+"0",""
+"0","dom <- xmlParse(xmlFile, validate = T)"
+"2","Error: XML content does not seem to be XML: ''
+"
