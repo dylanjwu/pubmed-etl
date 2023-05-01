@@ -12,8 +12,8 @@ mysql_conn <- dbConnect(
   db = 'cs5200_db',
   user = 'admin',
   port = 3306,
-  host = 'cs5200-db.cq0mezfgdqbr.us-east-1.rds.amazonaws.com',
-  password = 'dylan1234'
+  host = '****',
+  password = '****'
 )
 
 
